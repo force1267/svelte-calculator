@@ -1,0 +1,96 @@
+<h1>Calculator</h1>
+
+<div class="calculator-container">
+
+	<input class="answer" type="text" bind:value=answer disabled/>
+	<input class="btn" type="button" value="c" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="7" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="8" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="9" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="/" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="4" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="5" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="6" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="*" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="1" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="2" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="3" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="-" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="0" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="." on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="+" on:click="handleClick(this.value)"/>
+	<input class="btn" type="button" value="=" on:click="handleClick(this.value)"/>
+</div>
+
+<script>
+	export default {
+		data() {
+			return {
+				operator : "",
+				dot : false,
+				memory : 0,
+				answer : "0",
+			}
+		},
+		methods: {
+			handleClick(val) {
+				val = val === "Enter" ? "=" : val;
+				var { operator, memory, answer, dot } = this.get();
+				
+				if( parseFloat(val) == val ){
+					if( answer == "0" ){
+						answer = "";
+					}
+					let res = answer + "" + val;
+					this.set({operator, memory, dot, answer:res});
+				} else if( val == "." ){
+					this.set({operator, memory, dot:true, answer:!dot?answer+".":answer});
+				} else if( val == "=" ){
+					var ans;
+					switch (operator) {
+						case "+":
+							ans = memory + parseFloat(answer);
+							this.set({operator, memory:0, dot:false, answer:ans});
+							break;
+						case "-":
+							ans = memory - parseFloat(answer);
+							this.set({operator, memory:0, dot:false, answer:ans});
+							break;
+						case "*":
+							ans = memory * parseFloat(answer);
+							this.set({operator, memory:0, dot:false, answer:ans});
+							break;
+						case "/":
+							ans = memory / parseFloat(answer);
+							this.set({operator, memory:0, dot:false, answer:ans});
+							break;
+						case "":
+							this.set({operator, memory:0, dot:false, answer});
+							break;
+					}
+				} else if( val == "c" ){
+					this.set({operator : "", dot : false, memory : 0, answer : "0"})
+				} else if( val == "+" || val == "-" || val == "*" || val == "/"){
+					this.set({operator:val, memory:parseFloat(answer), dot, answer:"0"});
+				} else { }
+			}
+		}
+	};
+</script>
+
+<style>
+	div.calculator-container {
+		margin-left : 40%;
+		width : 20%;
+	}
+	input.answer {
+		width: 65%;
+	}
+	input.btn {
+		width: 22%;
+	}
+	h1 {
+		margin-left : 40%;
+		color : gray;
+	}
+</style>
